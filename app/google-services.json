@@ -1,0 +1,33 @@
+{
+  "project_info": {
+    "project_number": "459179806893",
+    "project_id": "crafted-fcaac",
+    "storage_bucket": "crafted-fcaac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459179806893:android:8982a79177c235efab3624",
+        "android_client_info": {
+          "package_name": "com.example.craftedpics"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97434330160-tnvvmlogbkj41cjsnktsr0nn93h70fd1.apps.googleusercontent.com"
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR63XozrNqUG6SUSdB8EljiLYeLDLOhX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

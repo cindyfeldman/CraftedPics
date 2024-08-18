@@ -12,6 +12,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
@@ -27,10 +32,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-
 import com.example.craftedpics.databinding.ActivityMainBinding;
 import com.google.android.material.navigation.NavigationBarView;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     ActivityResultLauncher<Intent> resultLauncher;
     private Button newAlbumButton;
-    private ImageView imageView ;
+    private ImageView imageView;
 
 
     @Override
@@ -58,34 +61,19 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         View root = binding.getRoot();
-        imageView = findViewById(R.id.image_view);
-        onImageSelected();
-        // newAlbumButton.setOnClickListener(view -> pickImage());
+        //Request user sign into their google account
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken("97434330160-rbqn4al8eggvpcomsl6g9a3c7p891hgl.apps.googleusercontent.com")
+                .requestScopes(new Scope("https://www.googleapis.com/auth/photoslibrary"))
+                .build();
+        GoogleSignInClient client = GoogleSignIn.getClient(this, googleSignInOptions);
 
-    }
-    private void pickImage(){
-        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-        resultLauncher.launch(intent);
-    }
+        Intent signInIntent = client.getSignInIntent();//opens up google sign in
+        startActivity(signInIntent);
 
 
-
-    private void onImageSelected() {
-        resultLauncher =  registerForActivityResult (
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        try {
-                            Uri imageUri = result.getData().getData();
-                            imageView.setImageURI(imageUri);
-                        }catch(Exception e){
-                            Toast.makeText(MainActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
     }
 }
-
 
 
