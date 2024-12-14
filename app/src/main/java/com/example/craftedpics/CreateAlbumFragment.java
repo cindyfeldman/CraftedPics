@@ -1,86 +1,55 @@
 package com.example.craftedpics;
-
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
-import android.content.pm.PackageManager;
-
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.FormBody;
-import okhttp3.Headers;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.api.client.*;
-
-import android.Manifest;
 
 import com.example.craftedpics.databinding.FragmentCreatealbumBinding;
 import com.google.api.client.auth.oauth2.Credential;
-
-
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.Collections;
-
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
+import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.UserCredentials;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import javax.net.ssl.HttpsURLConnection;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.util.store.FileDataStoreFactory;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
+import java.util.List;
 
 public class CreateAlbumFragment extends Fragment {
-    private static final int REQUEST_READ_MEDIA_VISUAL_USER_SELECTED = 1;
     private FragmentCreatealbumBinding binding;
     private Button createAlbumButton;
     private EditText promptEditText;
+    private TextView titleText;
     String apiEndpoint = "http://10.0.2.2:5000/predict";
-    Credential credential;
-    MainActivity activity;
     ActivityResultLauncher<Intent> resultLauncher;
     private ImageView imageView ;
-    private long mTokenExpired;
-
-
+    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String CREDENTIALS_FILE_PATH = "google-services.json";
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    private static final List<String> SCOPES = Collections.singletonList("com.google.photos.library.v1.Scopes");
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCreatealbumBinding.inflate(inflater, container, false);
@@ -89,37 +58,43 @@ public class CreateAlbumFragment extends Fragment {
         promptEditText = root.findViewById(R.id.prompt_edittext);
         promptEditText.setOnClickListener(view ->  promptEditText.setText(""));
         imageView = root.findViewById(R.id.image_view);
-        onImageSelected();
+        titleText = root.findViewById(R.id.title_prompt_textview);
 
-        createAlbumButton.setOnClickListener(view -> pickImage());
-        //createAlbumButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-                //check for permission at runtime
-//                if(ContextCompat.checkSelfPermission(createAlbumButton.getContext(), Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED) != PackageManager.PERMISSION_GRANTED)
-//                {
-//                    //request camera permission
-//                   ActivityCompat.requestPermissions(activity, new String[]{ Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED}, REQUEST_READ_MEDIA_VISUAL_USER_SELECTED);
-//                   return;
-//                }
-                //open photo album
-//                Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-//                startActivity(intent);
-//                Toast.makeText(root.getContext(), promptEditText.getText(), Toast.LENGTH_SHORT).show();
+        root.findViewById(R.id.new_album_button).setOnClickListener(view -> {
+            try {
+                signIn();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
-
-          //}
-       // });
 
         return root;
     }
+    //create an authorized Credential object
+    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+        InputStream is = CreateAlbumFragment.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        if(is == null){
+            throw new FileNotFoundException("Resource not found" + CREDENTIALS_FILE_PATH);
+        }
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(is));
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setAccessType("offline")
+                .build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+        return credential;
+    }
+    private static void signIn()
+        throws IOException, GeneralSecurityException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
 
-    private void pickImage(){
-        Intent intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
-        resultLauncher.launch(intent);
 
     }
-
 
 
     private void onImageSelected() {

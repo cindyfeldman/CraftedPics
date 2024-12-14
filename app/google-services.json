@@ -1,30 +1,44 @@
 {
   "project_info": {
-    "project_number": "459179806893",
-    "project_id": "crafted-fcaac",
-    "storage_bucket": "crafted-fcaac.appspot.com"
+    "project_number": "364290282394",
+    "project_id": "craftedp-5af6a",
+    "storage_bucket": "craftedp-5af6a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:459179806893:android:8982a79177c235efab3624",
+        "mobilesdk_app_id": "1:323689183788:android:3af2905fe1b31b7ee06f89",
         "android_client_info": {
           "package_name": "com.example.craftedpics"
         }
       },
       "oauth_client": [
         {
-          "client_id": "97434330160-tnvvmlogbkj41cjsnktsr0nn93h70fd1.apps.googleusercontent.com"
+          "client_id": "97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.craftedpics",
+            "certificate_hash": "b19e525719b7d31a44c9ba011a8d56733f6b55b0"
+          }
+        },
+        {
+          "client_id": "97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBR63XozrNqUG6SUSdB8EljiLYeLDLOhX0"
+          "current_key": "AIzaSyCQ1JCZUVtxkZaZ3AQykd1ovmmDsmlLDGg"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
