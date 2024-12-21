@@ -20,4 +20,5 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="default_web_client_id">97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com</string>
 </resources>

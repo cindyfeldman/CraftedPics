@@ -1,0 +1,9 @@
+{
+  "installed": {
+    "client_id": "97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com",
+    "project_id": "craftedpics",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
+  }
+}

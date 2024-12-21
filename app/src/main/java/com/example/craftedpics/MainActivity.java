@@ -1,9 +1,4 @@
 package com.example.craftedpics;
-
-
-
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
