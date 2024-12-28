@@ -63,6 +63,7 @@ public class CreateAlbumFragment extends Fragment {
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getResources().getString(R.string.server_client_id))
                 .requestScopes( new Scope("https://www.googleapis.com/auth/photoslibrary.readonly"))
+                .requestServerAuthCode(getResources().getString(R.string.server_client_id), true)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(getContext(), googleSignInOptions);
@@ -88,7 +89,7 @@ public class CreateAlbumFragment extends Fragment {
         if (requestCode == 123) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                String token = getResources().getString(R.string.api_token);// Use this token to make API requests
+                String token = getResources().getString(R.string.api_token);
                 fetchAlbums(token);
             }catch(Exception e){
                 System.out.println("ERROR");
