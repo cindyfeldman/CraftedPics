@@ -10,30 +10,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.BeginSignInResult;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import android.widget.TextView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-
 import androidx.activity.result.ActivityResultLauncher;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
 import com.example.craftedpics.databinding.ActivityMainBinding;
 
 
@@ -44,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> resultLauncher;
     private Button newAlbumButton;
     private ImageView imageView;
+    private TextView textView;
     private EditText labelText;
-    private SignInClient oneTapClient;
-    private static final int REQ_ONE_TAP = 100;
-    private BeginSignInRequest signInRequest;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
         View root = binding.getRoot();
 
+
     }
 
-
-
 }
-
 

@@ -21,4 +21,6 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="default_web_client_id">97434330160-rlhj29ap0j2b4v1nrpojlo5vp5561p7p.apps.googleusercontent.com</string>
+    <string name="server_client_id">97434330160-srdlhhikvjambkjtb5bkgpthfmmo98n4.apps.googleusercontent.com</string>
+    <string name="api_token">"ya29.a0ARW5m74-WIXngHWQwAdTaeWvTPMF-6lb-1jDWl8q0Mil5kn3aEdQAJcSr1rAewMpCa-0ydzWkkfWOmKKyr7vk0OdWHqhhJgg9ixWjFTwntL-js2csNAteXdFRUbwxPyi9N_K8E1SZZ5RbbzEeC9wbDq0v778KyVS43lLxjLjaCgYKAa0SARASFQHGX2MiXtHfbylUefilpZPtFZrU6g0175</string>
 </resources>
